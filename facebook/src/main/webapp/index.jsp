@@ -6,7 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Facebook</title>
-<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/bootstrap-icons.css">
 
 </head>
 <body>
@@ -22,6 +23,7 @@
 							<th scope="col">Nome</th>
 							<th scope="col">Genero</th>
 							<th scope="col">email</th>
+							<th scope="col">Ações</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -31,11 +33,13 @@
 								<td>${user.getName()}</td>
 								<td>${user.getGender()}</td>
 								<td>${user.getEmail()}</td>
+								<td> <a href="${pageContext.request.contextPath}/user/update?userId=${user.getId()}" class="bi bi-pencil-square"></a></td>
+								
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
-				<a class="btn btn-primary" href="user_form.html">Novo Usuario</a>
+				<a class="btn btn-primary" href="user-form.jsp">Novo Usuario</a>
 
 			</div>
 			<div class="col-md-2"></div>

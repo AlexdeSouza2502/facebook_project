@@ -14,24 +14,24 @@ import model.User;
 import model.dao.DAOFactory;
 import model.dao.UserDAO;
 
-@WebServlet(urlPatterns = {"", "/save"})
+@WebServlet(urlPatterns = {"", "/save", "/user/update"})
 public class UsersController extends HttpServlet{
-	
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
-		
+
+
 		String action = req.getRequestURI();
-		
+
 		System.out.println(action);
-		
+
 		switch (action) {
 		case "/facebook/": {
 			//Carregar a lista de usuarios
 			UserDAO dao = DAOFactory.createDAO(UserDAO.class);
-			
+
 			try {
 				List<model.User> users = dao.listAll();
 				//colocar ela na requisição
@@ -40,12 +40,12 @@ public class UsersController extends HttpServlet{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
+
+
 			//redirecionar para a index.jsp
 			RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
 			rd.forward(req, resp);
-			
+
 			break;
 		} 
 		case "/facebook/save":{
@@ -58,27 +58,50 @@ public class UsersController extends HttpServlet{
 			user.setEmail(userEmail);
 			user.setGender(userGender);
 			user.setName(userName);
-			
-			
+
+
 			//criar dao
 			UserDAO dao = DAOFactory.createDAO(UserDAO.class);
-			
+
 			//usar o usuario
 			try {
 				dao.save(user);
-				
+
 				resp.sendRedirect("/facebook");
-				
+
 			}catch(ModelException e){
 				e.printStackTrace();
 			}
 			break;
 		}
+		case"/facebook/user/update": {
+			String userIdStr = req.getParameter("userId");
+			int userId = Integer.parseInt(userIdStr);
+
+			UserDAO dao = DAOFactory.createDAO(UserDAO.class);
+
+			try {
+				User user = dao.findById(userId);
+				//colocar ela na requisição
+				req.setAttribute("usuario", user);
+				
+				//Redirecionar para user_form
+				RequestDispatcher rd = req.getRequestDispatcher("/user-form.jsp");
+				rd.forward(req, resp);
+				
+			} catch (ModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+
+			break;
+		}
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + action);
 		}
-		
-		
+
+
 	}
 
 }
